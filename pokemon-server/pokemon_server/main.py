@@ -4,11 +4,23 @@ import json
 import os
 import uvicorn
 
+from fastapi.middleware.cors import CORSMiddleware
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(current_dir, 'data.json')
 app = FastAPI()
 
+origins = ["http://127.0.0.1:5173", "http://localhost:5173"]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Evolution(BaseModel):
     id: str
@@ -36,6 +48,7 @@ def ping():
 
 @app.get("/pokemons")
 def get_pokemons():
+    print('working')
     return pokemons
 
 
